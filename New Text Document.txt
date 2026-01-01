@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy New Year 2026</title>
+    <style>
+        :root {
+            --ios-blur: blur(40px) saturate(200%);
+            --accent-glow: rgba(255, 255, 255, 0.4);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background: #000;
+        }
+
+        /* The Liquid Background Layer */
+        .mesh-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #000000, #0a0a1a, #1a0a1a);
+            z-index: -2;
+        }
+
+        .liquid-blob {
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -1;
+            opacity: 0.6;
+            animation: float 25s infinite alternate ease-in-out;
+        }
+        .blob-1 { background: #007aff; top: -20%; left: -10%; }
+        .blob-2 { background: #ff2d55; bottom: -20%; right: -10%; animation-delay: -5s; }
+        .blob-3 { background: #5856d6; top: 30%; right: 5%; animation-delay: -12s; }
+
+        /* The Glass Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: var(--ios-blur);
+            -webkit-backdrop-filter: var(--ios-blur);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            padding: 50px 30px;
+            text-align: center;
+            width: 85%;
+            max-width: 550px;
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.6);
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        /* Celebratory Text Hierarchy */
+        .wishing-text {
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 200;
+            font-size: 0.9rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .main-headline {
+            color: white;
+            font-weight: 700;
+            font-size: clamp(1.5rem, 7vw, 2.5rem);
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .countdown-subtitle {
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 400;
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+        }
+
+        /* Timer Layout */
+        .timer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .unit {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .number {
+            color: #fff;
+            font-size: clamp(2rem, 8vw, 3.5rem);
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .label {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            100% { transform: translate(80px, 40px) scale(1.15) rotate(45deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 480px) {
+            .glass-card { padding: 40px 15px; border-radius: 40px; }
+            .main-headline { letter-spacing: 1px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mesh-bg"></div>
+    <div class="liquid-blob blob-1"></div>
+    <div class="liquid-blob blob-2"></div>
+    <div class="liquid-blob blob-3"></div>
+
+    <div class="glass-card">
+        <div class="wishing-text">Wishing you a</div>
+        <div class="main-headline">HAPPY NEW YEAR</div>
+        <div class="countdown-subtitle">2026 Countdown</div>
+        
+        <div class="timer-grid">
+            <div class="unit">
+                <span id="d" class="number">00</span>
+                <span class="label">Days</span>
+            </div>
+            <div class="unit">
+                <span id="h" class="number">00</span>
+                <span class="label">Hours</span>
+            </div>
+            <div class="unit">
+                <span id="m" class="number">00</span>
+                <span class="label">Mins</span>
+            </div>
+            <div class="unit">
+                <span id="s" class="number">00</span>
+                <span class="label">Secs</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            // Precise target: Jan 1st 2026
+            const target = new Date(2026, 0, 1, 0, 0, 0).getTime();
+
+            function sync() {
+                const now = Date.now();
+                const diff = target - now;
+
+                if (diff <= 0) {
+                    document.querySelector('.glass-card').innerHTML = 
+                        "<div class='main-headline' style='font-size:3.5rem'>2026</div><div class='wishing-text'>WELCOME TO THE FUTURE</div>";
+                    return;
+                }
+
+                const d = Math.floor(diff / 86400000);
+                const h = Math.floor((diff % 86400000) / 3600000);
+                const m = Math.floor((diff % 3600000) / 60000);
+                const s = Math.floor((diff % 60000) / 1000);
+
+                document.getElementById('d').innerText = d;
+                document.getElementById('h').innerText = String(h).padStart(2, '0');
+                document.getElementById('m').innerText = String(m).padStart(2, '0');
+                document.getElementById('s').innerText = String(s).padStart(2, '0');
+            }
+
+            sync();
+            setInterval(sync, 1000);
+        };
+    </script>
+</body>
+</html>
